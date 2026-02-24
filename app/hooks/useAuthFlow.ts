@@ -6,6 +6,76 @@ export type Screen = "confirmation" | "loading" | "result";
 
 const PHRASES = ["Starting...", "Validating Batch...", "Checking IP...", "Generating Hash...", "Finishing..."];
 
+type LocationResult = {
+  ip: string;
+  region: string;
+};
+
+async function fetchWithTimeout(url: string, timeoutMs = 5000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, { signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function resolveUserLocation(): Promise<LocationResult> {
+  try {
+    const res = await fetchWithTimeout("https://ipapi.co/json/");
+    if (res.ok) {
+      const data = (await res.json()) as {
+        ip?: string;
+        country_name?: string;
+      };
+      if (data.ip || data.country_name) {
+        return {
+          ip: data.ip ?? "Unknown",
+          region: data.country_name ?? "Unknown",
+        };
+      }
+    }
+  } catch {
+    // fall through to next provider
+  }
+
+  try {
+    const res = await fetchWithTimeout("https://ipwho.is/");
+    if (res.ok) {
+      const data = (await res.json()) as {
+        success?: boolean;
+        ip?: string;
+        country?: string;
+      };
+      if (data.success) {
+        return {
+          ip: data.ip ?? "Unknown",
+          region: data.country ?? "Unknown",
+        };
+      }
+    }
+  } catch {
+    // fall through to next provider
+  }
+
+  try {
+    const res = await fetchWithTimeout("https://api.ipify.org?format=json");
+    if (res.ok) {
+      const data = (await res.json()) as { ip?: string };
+      return {
+        ip: data.ip ?? "Unknown",
+        region: "Unknown",
+      };
+    }
+  } catch {
+    // fall through to default return
+  }
+
+  return { ip: "Unknown", region: "Unknown" };
+}
+
 function generateRandomSerial() {
   return Array.from({ length: 12 }, () => Math.floor(Math.random() * 10)).join("");
 }
@@ -61,28 +131,9 @@ export function useAuthFlow() {
         setRandomSerial(generateRandomSerial());
         setHashCode(generateHash());
         void (async () => {
-          try {
-            const res = await fetch("https://ipwho.is/");
-            const data = (await res.json()) as {
-              success: boolean;
-              ip?: string;
-              city?: string;
-              region?: string;
-              country?: string;
-            };
-
-            if (data.success) {
-              setUserIp(data.ip ?? "Unknown");
-              const regionParts = [data.city, data.region, data.country].filter(Boolean);
-              setUserRegion(regionParts.join(", ") || "Unknown");
-            } else {
-              setUserIp("Unknown");
-              setUserRegion("Unknown");
-            }
-          } catch {
-            setUserIp("Unknown");
-            setUserRegion("Unknown");
-          }
+          const location = await resolveUserLocation();
+          setUserIp(location.ip);
+          setUserRegion(location.region);
         })();
         setScreen("result");
       }
