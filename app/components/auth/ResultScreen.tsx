@@ -2,19 +2,19 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 
 type ResultScreenProps = {
   userIp: string;
+  userRegion: string;
   randomSerial: string;
   hashCode: string;
   containerAnimation: string;
 };
 
-const logisticsRows = [
-  ["Serial Number", "NHGP281"],
-  ["Expiration", "05/2029"],
-  ["Region", "Brazil"],
-] as const;
-
-export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimation }: ResultScreenProps) {
+export function ResultScreen({ userIp, userRegion, randomSerial, hashCode, containerAnimation }: ResultScreenProps) {
   const currentYear = new Date().getFullYear();
+  const logisticsRows = [
+    ["Serial Number", "NHGP281"],
+    ["Expiration", "05/2029"],
+    ["Region", userRegion],
+  ] as const;
 
   return (
     <Flex direction="column" w="100%" maxW="420px" animation={containerAnimation}>
@@ -45,7 +45,7 @@ export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimatio
         </Flex>
 
         <Heading fontSize="20px" fontWeight="900">
-          AUTENTICIDADE CONFIRMADA
+          AUTHENTICITY CONFIRMED
         </Heading>
         <Text color="var(--success)" fontWeight="900" fontSize="11px" letterSpacing="1px">
           SECURE ANALYTICS VERIFIED

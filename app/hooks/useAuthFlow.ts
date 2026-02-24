@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export type Screen = "confirmation" | "loading" | "result";
 
-const PHRASES = ["Iniciando...", "Validando Lote...", "Checando IP...", "Gerando Hash...", "Finalizando..."];
+const PHRASES = ["Starting...", "Validating Batch...", "Checking IP...", "Generating Hash...", "Finishing..."];
 
 function generateRandomSerial() {
   return Array.from({ length: 12 }, () => Math.floor(Math.random() * 10)).join("");
@@ -24,15 +24,17 @@ function generateHash() {
 export function useAuthFlow() {
   const [screen, setScreen] = useState<Screen>("confirmation");
   const [progress, setProgress] = useState(0);
-  const [statusText, setStatusText] = useState("Criptografando Túnel...");
+  const [statusText, setStatusText] = useState("Encrypting Tunnel...");
   const [randomSerial, setRandomSerial] = useState("000000000000");
   const [hashCode, setHashCode] = useState("");
   const [userIp, setUserIp] = useState("...");
+  const [userRegion, setUserRegion] = useState("...");
 
   const startProcess = () => {
     setProgress(0);
-    setStatusText("Criptografando Túnel...");
+    setStatusText("Encrypting Tunnel...");
     setUserIp("...");
+    setUserRegion("...");
     setHashCode("");
     setRandomSerial("000000000000");
     setScreen("loading");
@@ -60,11 +62,26 @@ export function useAuthFlow() {
         setHashCode(generateHash());
         void (async () => {
           try {
-            const res = await fetch("https://api.ipify.org?format=json");
-            const data = (await res.json()) as { ip: string };
-            setUserIp(data.ip);
+            const res = await fetch("https://ipwho.is/");
+            const data = (await res.json()) as {
+              success: boolean;
+              ip?: string;
+              city?: string;
+              region?: string;
+              country?: string;
+            };
+
+            if (data.success) {
+              setUserIp(data.ip ?? "Unknown");
+              const regionParts = [data.city, data.region, data.country].filter(Boolean);
+              setUserRegion(regionParts.join(", ") || "Unknown");
+            } else {
+              setUserIp("Unknown");
+              setUserRegion("Unknown");
+            }
           } catch {
-            setUserIp("187.64.12.102");
+            setUserIp("Unknown");
+            setUserRegion("Unknown");
           }
         })();
         setScreen("result");
@@ -83,6 +100,7 @@ export function useAuthFlow() {
     randomSerial,
     hashCode,
     userIp,
+    userRegion,
     startProcess,
   };
 }

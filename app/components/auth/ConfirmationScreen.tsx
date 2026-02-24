@@ -8,10 +8,10 @@ export function ConfirmationScreen({ onConfirm }: ConfirmationScreenProps) {
   return (
     <Box maxW="440px" w="100%" textAlign="center">
       <Heading color="var(--text-main)" fontSize="28px" fontWeight="900" letterSpacing="-1px" mb="16px">
-        VERIFICAÇÃO
+        VERIFICATION
       </Heading>
       <Text color="var(--text-sub)" fontSize="15px" mb="35px" lineHeight="1.6">
-        Atesto possuir prescrição médica válida e confirmo que o produto foi adquirido em canal de venda licenciado.
+        I certify that I have a valid medical prescription and confirm that the product was purchased through a licensed sales channel.
       </Text>
       <Button
         w="100%"
@@ -27,7 +27,7 @@ export function ConfirmationScreen({ onConfirm }: ConfirmationScreenProps) {
         _active={{ transform: "scale(0.97)" }}
         onClick={onConfirm}
       >
-        CONFIRMAR E VALIDAR
+        CONFIRM AND VALIDATE
       </Button>
     </Box>
   );
