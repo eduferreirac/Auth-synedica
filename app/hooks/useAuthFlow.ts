@@ -98,13 +98,13 @@ export function useAuthFlow() {
   const [randomSerial, setRandomSerial] = useState("000000000000");
   const [hashCode, setHashCode] = useState("");
   const [userIp, setUserIp] = useState("...");
-  const [userRegion, setUserRegion] = useState("...");
+  // const [userRegion, setUserRegion] = useState("...");
 
   const startProcess = () => {
     setProgress(0);
     setStatusText("Encrypting Tunnel...");
     setUserIp("...");
-    setUserRegion("...");
+    // setUserRegion("...");
     setHashCode("");
     setRandomSerial("000000000000");
     setScreen("loading");
@@ -133,7 +133,7 @@ export function useAuthFlow() {
         void (async () => {
           const location = await resolveUserLocation();
           setUserIp(location.ip);
-          setUserRegion(location.region);
+          // setUserRegion(location.region);
         })();
         setScreen("result");
       }
@@ -151,7 +151,7 @@ export function useAuthFlow() {
     randomSerial,
     hashCode,
     userIp,
-    userRegion,
+    // userRegion,
     startProcess,
   };
 }

@@ -18,7 +18,7 @@ const slideUp = keyframes`
 `;
 
 export default function Home() {
-  const { screen, progress, statusText, randomSerial, hashCode, userIp, userRegion, startProcess } = useAuthFlow();
+  const { screen, progress, statusText, randomSerial, hashCode, userIp, startProcess } = useAuthFlow();
 
   return (
     <Flex
@@ -38,7 +38,6 @@ export default function Home() {
       {screen === "result" ? (
         <ResultScreen
           userIp={userIp}
-          userRegion={userRegion}
           randomSerial={randomSerial}
           hashCode={hashCode}
           containerAnimation={`${slideUp} 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)`}

@@ -2,18 +2,17 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 
 type ResultScreenProps = {
   userIp: string;
-  userRegion: string;
   randomSerial: string;
   hashCode: string;
   containerAnimation: string;
 };
 
-export function ResultScreen({ userIp, userRegion, randomSerial, hashCode, containerAnimation }: ResultScreenProps) {
+export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimation }: ResultScreenProps) {
   const currentYear = new Date().getFullYear();
   const logisticsRows = [
     ["Serial Number", "NHGP281"],
     ["Expiration", "05/2029"],
-    ["Region", userRegion],
+    ["Region", "Brazil"],
   ] as const;
 
   return (
