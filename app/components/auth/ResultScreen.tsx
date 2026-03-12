@@ -11,7 +11,7 @@ export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimatio
   const currentYear = new Date().getFullYear();
   const logisticsRows = [
     ["Serial Number", "NHGP281"],
-    ["Expiration", "05/2029"],
+    ["Expiration", "01/2027"],
     ["Region", "Brazil"],
   ] as const;
 
