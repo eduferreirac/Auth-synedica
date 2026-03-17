@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
-import { activeCompany } from "@/app/config/company";
-import { getActiveCompanyLogoDataUrl } from "@/app/lib/companyBrandAsset";
+import { getCompanyLogoDataUrl } from "@/app/lib/companyBrandAsset";
+import { getRequestCompany } from "@/app/lib/companyServer";
 
 const allowedSizes = new Set([192, 512]);
 
@@ -16,7 +16,8 @@ export async function GET(
     return new Response("Icon size not supported", { status: 404 });
   }
 
-  const logoSrc = await getActiveCompanyLogoDataUrl();
+  const company = await getRequestCompany();
+  const logoSrc = await getCompanyLogoDataUrl(company);
   const logoSize = parsedSize === 512 ? 360 : 136;
 
   return new ImageResponse(
@@ -35,7 +36,7 @@ export async function GET(
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={logoSrc}
-          alt={activeCompany.logoAlt}
+          alt={company.logoAlt}
           style={{
             width: `${logoSize}px`,
             height: `${logoSize}px`,

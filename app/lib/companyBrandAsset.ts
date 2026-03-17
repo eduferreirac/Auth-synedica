@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { activeCompany } from "../config/company";
+import type { CompanyConfig } from "../config/company";
 
 function getMimeType(filePath: string) {
   if (filePath.endsWith(".svg")) {
@@ -14,8 +14,8 @@ function getMimeType(filePath: string) {
   return "application/octet-stream";
 }
 
-export async function getActiveCompanyLogoDataUrl() {
-  const logoPath = path.join(process.cwd(), "public", activeCompany.logoSrc.replace(/^\//, ""));
+export async function getCompanyLogoDataUrl(company: CompanyConfig) {
+  const logoPath = path.join(process.cwd(), "public", company.logoSrc.replace(/^\//, ""));
   const logoBuffer = await readFile(logoPath);
   const mimeType = getMimeType(logoPath);
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { activeCompany } from "../config/company";
+import { useCompany } from "../providers";
 
 export type Screen = "confirmation" | "loading" | "result";
 
@@ -91,9 +91,10 @@ function generateHash() {
 }
 
 export function useAuthFlow() {
+  const company = useCompany();
   const [screen, setScreen] = useState<Screen>("confirmation");
   const [progress, setProgress] = useState(0);
-  const [statusText, setStatusText] = useState(activeCompany.loadingInitialStatus);
+  const [statusText, setStatusText] = useState(company.loadingInitialStatus);
   const [randomSerial, setRandomSerial] = useState("000000000000");
   const [hashCode, setHashCode] = useState("");
   const [userIp, setUserIp] = useState("...");
@@ -101,7 +102,7 @@ export function useAuthFlow() {
 
   const startProcess = () => {
     setProgress(0);
-    setStatusText(activeCompany.loadingInitialStatus);
+    setStatusText(company.loadingInitialStatus);
     setUserIp("...");
     // setUserRegion("...");
     setHashCode("");
@@ -122,7 +123,7 @@ export function useAuthFlow() {
 
       if (p % 20 === 0) {
         const idx = Math.floor(p / 21);
-        setStatusText(activeCompany.loadingPhrases[Math.min(idx, activeCompany.loadingPhrases.length - 1)]);
+        setStatusText(company.loadingPhrases[Math.min(idx, company.loadingPhrases.length - 1)]);
       }
 
       if (p >= 100) {
@@ -141,7 +142,7 @@ export function useAuthFlow() {
     return () => {
       clearInterval(interval);
     };
-  }, [screen]);
+  }, [company, screen]);
 
   return {
     screen,

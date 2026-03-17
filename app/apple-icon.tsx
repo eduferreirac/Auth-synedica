@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
-import { activeCompany } from "./config/company";
-import { getActiveCompanyLogoDataUrl } from "./lib/companyBrandAsset";
+import { getCompanyLogoDataUrl } from "./lib/companyBrandAsset";
+import { getRequestCompany } from "./lib/companyServer";
 
 export const size = {
   width: 180,
@@ -10,7 +10,8 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function AppleIcon() {
-  const logoSrc = await getActiveCompanyLogoDataUrl();
+  const company = await getRequestCompany();
+  const logoSrc = await getCompanyLogoDataUrl(company);
 
   return new ImageResponse(
     (
@@ -27,7 +28,7 @@ export default async function AppleIcon() {
         {/* `next/image` is not supported inside ImageResponse markup. */}
         <img
           src={logoSrc}
-          alt={activeCompany.logoAlt}
+          alt={company.logoAlt}
           style={{
             width: "132px",
             height: "132px",

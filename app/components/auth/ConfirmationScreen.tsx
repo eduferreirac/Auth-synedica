@@ -1,18 +1,20 @@
 import { Box, Button, Heading, Text } from "@chakra-ui/react";
-import { activeCompany } from "@/app/config/company";
+import { useCompany } from "@/app/providers";
 
 type ConfirmationScreenProps = {
   onConfirm: () => void;
 };
 
 export function ConfirmationScreen({ onConfirm }: ConfirmationScreenProps) {
+  const company = useCompany();
+
   return (
     <Box maxW="440px" w="100%" textAlign="center">
       <Heading color="var(--text-main)" fontSize="28px" fontWeight="900" letterSpacing="-1px" mb="16px">
-        {activeCompany.verificationTitle}
+        {company.verificationTitle}
       </Heading>
       <Text color="var(--text-sub)" fontSize="15px" mb="35px" lineHeight="1.6">
-        {activeCompany.verificationDescription}
+        {company.verificationDescription}
       </Text>
       <Button
         w="100%"
@@ -28,7 +30,7 @@ export function ConfirmationScreen({ onConfirm }: ConfirmationScreenProps) {
         _active={{ transform: "scale(0.97)" }}
         onClick={onConfirm}
       >
-        {activeCompany.confirmButtonLabel}
+        {company.confirmButtonLabel}
       </Button>
     </Box>
   );

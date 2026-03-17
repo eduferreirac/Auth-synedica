@@ -1,5 +1,5 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import { activeCompany } from "@/app/config/company";
+import { useCompany } from "@/app/providers";
 
 type LoadingScreenProps = {
   progress: number;
@@ -8,9 +8,11 @@ type LoadingScreenProps = {
 };
 
 export function LoadingScreen({ progress, statusText, logoAnimation }: LoadingScreenProps) {
+  const company = useCompany();
+
   return (
     <Flex direction="column" align="center" w="100%" maxW="400px">
-      <Image src={activeCompany.logoSrc} alt={activeCompany.logoAlt} w="130px" mb="40px" animation={logoAnimation} objectFit="contain" />
+      <Image src={company.logoSrc} alt={company.logoAlt} w="130px" mb="40px" animation={logoAnimation} objectFit="contain" />
       <Box w="100%" h="8px" bg="#f1f5f9" borderRadius="20px" overflow="hidden" mb="20px">
         <Box h="100%" w={`${progress}%`} bg="linear-gradient(90deg, #d6a74f, #e9c46a)" borderRadius="20px" />
       </Box>

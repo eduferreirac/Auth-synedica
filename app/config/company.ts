@@ -1,6 +1,6 @@
 export type CompanyId = "synedica" | "blacklabs";
 
-type CompanyConfig = {
+export type CompanyConfig = {
   id: CompanyId;
   name: string;
   logoSrc: string;
@@ -17,6 +17,7 @@ type CompanyConfig = {
   logisticsTitle: string;
   securityTitle: string;
   footerLabel: string;
+  hostPatterns: string[];
   logisticsSerial: string;
   logisticsExpiration: string;
   logisticsRegion: string;
@@ -41,6 +42,7 @@ export const companies: Record<CompanyId, CompanyConfig> = {
     logisticsTitle: "Logistics Trace",
     securityTitle: "Security Credentials",
     footerLabel: "ENCRYPTED VERIFICATION SYSTEM",
+    hostPatterns: ["synedica"],
     logisticsSerial: "NHGP281",
     logisticsExpiration: "01/2027",
     logisticsRegion: "Brazil",
@@ -63,6 +65,7 @@ export const companies: Record<CompanyId, CompanyConfig> = {
     logisticsTitle: "Logistics Trace",
     securityTitle: "Security Credentials",
     footerLabel: "ENCRYPTED VERIFICATION SYSTEM",
+    hostPatterns: ["blacklabs", "black-labs"],
     logisticsSerial: "BKLP427",
     logisticsExpiration: "11/2027",
     logisticsRegion: "Brazil",
@@ -83,4 +86,18 @@ export function getCompanyConfig(companyValue?: string | null) {
   return companies[defaultCompanyId];
 }
 
-export const activeCompany = getCompanyConfig(process.env.NEXT_PUBLIC_COMPANY);
+export function getCompanyConfigByHost(hostValue?: string | null) {
+  const normalizedHost = hostValue?.trim().toLowerCase().split(":")[0];
+
+  if (normalizedHost) {
+    const matchedCompany = companyIds.find((companyId) =>
+      companies[companyId].hostPatterns.some((pattern) => normalizedHost.includes(pattern)),
+    );
+
+    if (matchedCompany) {
+      return companies[matchedCompany];
+    }
+  }
+
+  return getCompanyConfig(process.env.NEXT_PUBLIC_COMPANY);
+}

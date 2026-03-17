@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
-import { activeCompany } from "@/app/config/company";
+import { useCompany } from "@/app/providers";
 
 type ResultScreenProps = {
   userIp: string;
@@ -9,11 +9,12 @@ type ResultScreenProps = {
 };
 
 export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimation }: ResultScreenProps) {
+  const company = useCompany();
   const currentYear = new Date().getFullYear();
   const logisticsRows = [
-    ["Serial Number", activeCompany.logisticsSerial],
-    ["Expiration", activeCompany.logisticsExpiration],
-    ["Region", activeCompany.logisticsRegion],
+    ["Serial Number", company.logisticsSerial],
+    ["Expiration", company.logisticsExpiration],
+    ["Region", company.logisticsRegion],
   ] as const;
 
   return (
@@ -45,10 +46,10 @@ export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimatio
         </Flex>
 
         <Heading fontSize="20px" fontWeight="900">
-          {activeCompany.resultTitle}
+          {company.resultTitle}
         </Heading>
         <Text color="var(--success)" fontWeight="900" fontSize="11px" letterSpacing="1px">
-          {activeCompany.verifiedBadge}
+          {company.verifiedBadge}
         </Text>
 
         <Box textAlign="left" mt="25px" bg="#f8fafc" p="25px" borderRadius="25px" border="1px solid #f1f5f9">
@@ -61,7 +62,7 @@ export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimatio
             textTransform="uppercase"
             mb="10px"
           >
-            {activeCompany.logisticsTitle}
+            {company.logisticsTitle}
           </Text>
 
           {logisticsRows.map(([label, value], idx) => (
@@ -92,7 +93,7 @@ export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimatio
             textTransform="uppercase"
             mb="15px"
           >
-            {activeCompany.securityTitle}
+            {company.securityTitle}
           </Text>
 
           <Flex justify="space-between" fontSize="13px" py="6px" borderBottom="1px solid rgba(0,0,0,0.03)">
@@ -132,7 +133,7 @@ export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimatio
       </Box>
 
       <Text textAlign="center" color="#94a3b8" fontSize="10px" mt="25px" fontWeight="900">
-        {activeCompany.footerLabel} © {currentYear}
+        {company.footerLabel} © {currentYear}
       </Text>
     </Flex>
   );
