@@ -1,4 +1,23 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Multi-company setup
+
+This app now supports multiple companies through `.env`.
+
+Create a `.env.local` file based on `.env.example`:
+
+```bash
+cp .env.example .env.local
+```
+
+Set the company with `NEXT_PUBLIC_COMPANY`.
+
+Supported values:
+
+- `synedica`
+- `blacklabs`
+
+If `NEXT_PUBLIC_COMPANY` is missing or invalid, the app falls back to the first configured company, currently `synedica`.
+
+The selected company changes the logo, metadata, verification copy, loading messages, and verification product labels.
 
 ## Getting Started
 

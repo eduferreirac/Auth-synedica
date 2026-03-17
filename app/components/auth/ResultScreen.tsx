@@ -1,4 +1,5 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { activeCompany } from "@/app/config/company";
 
 type ResultScreenProps = {
   userIp: string;
@@ -10,9 +11,9 @@ type ResultScreenProps = {
 export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimation }: ResultScreenProps) {
   const currentYear = new Date().getFullYear();
   const logisticsRows = [
-    ["Serial Number", "NHGP281"],
-    ["Expiration", "01/2027"],
-    ["Region", "Brazil"],
+    ["Serial Number", activeCompany.logisticsSerial],
+    ["Expiration", activeCompany.logisticsExpiration],
+    ["Region", activeCompany.logisticsRegion],
   ] as const;
 
   return (
@@ -44,10 +45,10 @@ export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimatio
         </Flex>
 
         <Heading fontSize="20px" fontWeight="900">
-          AUTHENTICITY CONFIRMED
+          {activeCompany.resultTitle}
         </Heading>
         <Text color="var(--success)" fontWeight="900" fontSize="11px" letterSpacing="1px">
-          SECURE ANALYTICS VERIFIED
+          {activeCompany.verifiedBadge}
         </Text>
 
         <Box textAlign="left" mt="25px" bg="#f8fafc" p="25px" borderRadius="25px" border="1px solid #f1f5f9">
@@ -60,7 +61,7 @@ export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimatio
             textTransform="uppercase"
             mb="10px"
           >
-            Logistics Trace
+            {activeCompany.logisticsTitle}
           </Text>
 
           {logisticsRows.map(([label, value], idx) => (
@@ -91,7 +92,7 @@ export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimatio
             textTransform="uppercase"
             mb="15px"
           >
-            Security Credentials
+            {activeCompany.securityTitle}
           </Text>
 
           <Flex justify="space-between" fontSize="13px" py="6px" borderBottom="1px solid rgba(0,0,0,0.03)">
@@ -131,7 +132,7 @@ export function ResultScreen({ userIp, randomSerial, hashCode, containerAnimatio
       </Box>
 
       <Text textAlign="center" color="#94a3b8" fontSize="10px" mt="25px" fontWeight="900">
-        ENCRYPTED VERIFICATION SYSTEM © {currentYear}
+        {activeCompany.footerLabel} © {currentYear}
       </Text>
     </Flex>
   );

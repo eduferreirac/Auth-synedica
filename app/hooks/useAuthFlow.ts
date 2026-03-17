@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { activeCompany } from "../config/company";
 
 export type Screen = "confirmation" | "loading" | "result";
-
-const PHRASES = ["Starting...", "Validating Batch...", "Checking IP...", "Generating Hash...", "Finishing..."];
 
 type LocationResult = {
   ip: string;
@@ -94,7 +93,7 @@ function generateHash() {
 export function useAuthFlow() {
   const [screen, setScreen] = useState<Screen>("confirmation");
   const [progress, setProgress] = useState(0);
-  const [statusText, setStatusText] = useState("Encrypting Tunnel...");
+  const [statusText, setStatusText] = useState(activeCompany.loadingInitialStatus);
   const [randomSerial, setRandomSerial] = useState("000000000000");
   const [hashCode, setHashCode] = useState("");
   const [userIp, setUserIp] = useState("...");
@@ -102,7 +101,7 @@ export function useAuthFlow() {
 
   const startProcess = () => {
     setProgress(0);
-    setStatusText("Encrypting Tunnel...");
+    setStatusText(activeCompany.loadingInitialStatus);
     setUserIp("...");
     // setUserRegion("...");
     setHashCode("");
@@ -123,7 +122,7 @@ export function useAuthFlow() {
 
       if (p % 20 === 0) {
         const idx = Math.floor(p / 21);
-        setStatusText(PHRASES[Math.min(idx, PHRASES.length - 1)]);
+        setStatusText(activeCompany.loadingPhrases[Math.min(idx, activeCompany.loadingPhrases.length - 1)]);
       }
 
       if (p >= 100) {
