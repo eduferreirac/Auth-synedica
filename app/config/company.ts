@@ -44,7 +44,7 @@ export const companies: Record<CompanyId, CompanyConfig> = {
     footerLabel: "ENCRYPTED VERIFICATION SYSTEM",
     hostPatterns: ["synedica"],
     logisticsSerial: "NHGP281",
-    logisticsExpiration: "01/2027",
+    logisticsExpiration: "05/2028",
     logisticsRegion: "Brazil",
   },
   blacklabs: {
